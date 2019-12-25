@@ -26,6 +26,7 @@ bool psci_power_state_is_valid(u32 state);
 
 int psci_cpu_init_idle(unsigned int cpu);
 int psci_cpu_suspend_enter(unsigned long index);
+
 enum psci_conduit {
 	PSCI_CONDUIT_NONE,
 	PSCI_CONDUIT_SMC,
