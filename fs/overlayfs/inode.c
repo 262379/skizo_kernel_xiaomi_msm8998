@@ -91,6 +91,7 @@ int ovl_permission(struct inode *inode, int mask)
 	struct ovl_entry *oe;
 	struct dentry *alias = NULL;
 	struct inode *realinode;
+	const struct cred *old_cred;
 	struct dentry *realdentry;
 	bool is_upper;
 	int err;
@@ -143,6 +144,15 @@ int ovl_permission(struct inode *inode, int mask)
 			goto out_dput;
 	}
 
+	/*
+	 * Check overlay inode with the creds of task and underlying inode
+	 * with creds of mounter
+	 */
+	err = generic_permission(inode, mask);
+	if (err)
+		goto out_dput;
+
+	old_cred = ovl_override_creds(inode->i_sb);
 	err = __inode_permission(realinode, mask);
 	ovl_revert_creds(old_cred);
 
@@ -150,7 +160,6 @@ out_dput:
 	dput(alias);
 	return err;
 }
-
 
 struct ovl_link_data {
 	struct dentry *realdentry;
