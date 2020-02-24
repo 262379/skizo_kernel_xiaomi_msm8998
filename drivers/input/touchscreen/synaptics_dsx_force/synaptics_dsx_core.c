@@ -2010,7 +2010,7 @@ static void synaptics_rmi4_sensor_report(struct synaptics_rmi4_data *rmi4_data,
 		}
 	}
 	if (status.unconfigured && !status.flash_prog) {
-		pr_notice("%s: spontaneous reset detected\n", __func__);
+		pr_debug("%s: spontaneous reset detected\n", __func__);
 		synaptics_rmi4_set_configured(rmi4_data);
 	}
 
